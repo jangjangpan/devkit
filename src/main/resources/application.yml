@@ -1,0 +1,40 @@
+# 외부 Tomcat에 WAR로 deploy 시 server.port/context-path는
+# Tomcat connector 설정과 webapp 폴더명(devkit)을 따른다.
+spring:
+  datasource:
+    # driver-class-name 은 URL prefix 로 자동 감지 (postgresql / oracle / sqlserver / mariadb)
+    url: ${DB_URL:jdbc:postgresql://127.0.0.1:5433/matrixdb}
+    username: ${DB_USER:matrix}
+    password: ${DB_PASSWORD:matrix}
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      # DB가 없어도 앱이 기동되도록 (SQL 정렬/색상/DDL 도구는 DB 불필요).
+      # ERD/순서도 저장 기능만 DB 연결을 사용한다.
+      initialization-fail-timeout: -1
+      connection-timeout: 5000
+
+# 앱 고유 설정
+app:
+  db:
+    # SeedRunner가 dk_user 생성 시 사용. 가능한 값: postgresql | oracle | mssql | mysql
+    dialect: ${DB_DIALECT:postgresql}
+
+devkit:
+  jwt:
+    # 비워두면(JWT_SECRET 미설정) SecretProvider가 시크릿 파일에서 자동 생성/로드한다.
+    # 여러 인스턴스가 토큰을 공유해야 하면 JWT_SECRET 환경변수로 공통 시크릿을 주입한다.
+    secret: ${JWT_SECRET:}
+    expiration-hours: 24
+  # 시크릿 파일 디렉터리 override (기본: <사용자홈>/.devkit/devkit.secret)
+  secret-dir: ${DEVKIT_SECRET_DIR:}
+
+spring.servlet.multipart:
+  enabled: true
+  max-file-size: 20MB
+  max-request-size: 20MB
+
+logging:
+  level:
+    com.devkit: DEBUG
+    org.springframework.jdbc.core: INFO

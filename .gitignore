@@ -1,0 +1,17 @@
+# 빌드 산출물 / 의존성
+target/
+node_modules/
+frontend/node_modules/
+frontend/tsconfig.tsbuildinfo
+src/main/resources/static/
+*.log
+.DS_Store
+
+# 로컬 설정 / 비밀
+.vscode/
+.env
+*.key
+*.secret
+
+# 독점 바이너리(서버 라이브러리) 유입 방지 — 공개 저장소에 jar 포함 금지
+src/main/webapp/WEB-INF/lib/*.jar

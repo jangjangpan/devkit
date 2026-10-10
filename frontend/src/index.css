@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pretendard Variable 폰트 self-host — 모든 사용자·브라우저에서 동일 렌더링 보장(폐쇄망: CDN 미사용).
+   public/fonts/ 파일을 Vite가 dist/fonts/로 복사 → Spring Boot 정적 서빙. 컨텍스트(base) 경로 포함. */
+@font-face {
+  font-family: 'Pretendard Variable';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('/devkit/fonts/PretendardVariable.woff2') format('woff2-variations'),
+       url('/devkit/fonts/PretendardVariable.woff2') format('woff2');
+}
+
+/* D2Coding — 코드/모노스페이스 self-host (앱 mono 스택 1순위, 모든 사용자 동일 코딩 폰트) */
+@font-face {
+  font-family: 'D2Coding';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/devkit/fonts/D2Coding.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'D2Coding';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/devkit/fonts/D2Coding-Bold.woff2') format('woff2');
+}
+
+/* 테마(스킨) 색상 — html[data-theme="X"]로 전환. RGB 채널 분리 표기(alpha 모디파이어 호환). navy=짙음 / blue=메인 / cyan=강조 */
+:root,
+html[data-theme="BLUE"]   { --dk-navy: 15 45 82;    --dk-blue: 26 103 163;  --dk-cyan: 0 159 183; }
+html[data-theme="INDIGO"] { --dk-navy: 30 27 75;    --dk-blue: 79 70 229;   --dk-cyan: 129 140 248; }
+html[data-theme="GREEN"]  { --dk-navy: 20 83 45;    --dk-blue: 22 163 74;   --dk-cyan: 74 222 128; }
+html[data-theme="TEAL"]   { --dk-navy: 19 78 74;    --dk-blue: 13 148 136;  --dk-cyan: 45 212 191; }
+html[data-theme="PURPLE"] { --dk-navy: 59 7 100;    --dk-blue: 124 58 237;  --dk-cyan: 167 139 250; }
+html[data-theme="ROSE"]   { --dk-navy: 76 5 25;     --dk-blue: 225 29 72;   --dk-cyan: 251 113 133; }
+html[data-theme="ORANGE"] { --dk-navy: 124 45 18;   --dk-blue: 234 88 12;   --dk-cyan: 251 146 60; }
+html[data-theme="SLATE"]  { --dk-navy: 15 23 42;    --dk-blue: 71 85 105;   --dk-cyan: 148 163 184; }
+
+html, body, #root { height: 100%; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui,
+               'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI', sans-serif;
+  background: #F4F6F8;
+  color: #1F2937;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+html.dark body { background: #0B1220; color: #E5E7EB; }
+
+@layer components {
+  .dk-card { @apply bg-white border border-gray-100 rounded-lg dark:bg-[#162033] dark:border-[#243149]; }
+  .dk-input {
+    @apply border border-gray-200 rounded px-3 py-2 text-sm bg-white text-gray-700
+           focus:outline-none focus:ring-2 focus:ring-dk-blue/50 focus:border-dk-blue
+           dark:bg-[#0F1A2D] dark:border-[#2A3953] dark:text-gray-100 dark:placeholder-gray-500;
+  }
+  .dk-btn { @apply inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed; }
+  .dk-btn-primary { @apply dk-btn bg-dk-blue text-white hover:bg-dk-navy; }
+  .dk-btn-secondary { @apply dk-btn bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#243149] dark:text-gray-100 dark:hover:bg-[#2E3D5C]; }
+  .dk-btn-danger { @apply dk-btn bg-dk-red text-white hover:opacity-90; }
+  .dk-btn-ghost { @apply dk-btn text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10; }
+}
+
+/* 사이드바 네비 스크롤바 — navy 배경에 묻히도록 평소엔 투명, 마우스 올릴 때만 옅게 */
+.dk-nav-scroll { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+.dk-nav-scroll:hover { scrollbar-color: rgba(255, 255, 255, 0.18) transparent; }
+.dk-nav-scroll::-webkit-scrollbar { width: 6px; }
+.dk-nav-scroll::-webkit-scrollbar-track { background: transparent; }
+.dk-nav-scroll::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
+.dk-nav-scroll:hover::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); }
+
+/* CodeMirror 코드 폰트를 앱 mono 스택(D2Coding self-host)으로 통일 — CM 기본 monospace 오버라이드 */
+.cm-editor .cm-scroller { font-family: 'D2Coding', Consolas, Menlo, Monaco, monospace; }
+
+/* React Flow 노드 핸들 */
+.react-flow__handle { @apply w-2 h-2 bg-dk-blue border-white; }
+.react-flow__attribution { display: none; }
+/* 다크모드 캔버스 */
+html.dark .react-flow { background-color: #0B1220; }
+html.dark .react-flow__controls button { background: #1b2942; border-color: #2A3953; color: #cbd5e1; }
+html.dark .react-flow__minimap { background: #162033; }
